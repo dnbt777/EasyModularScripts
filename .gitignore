@@ -1,6 +1,7 @@
 *.env
 **/.env
 .env
+ask-app/.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
