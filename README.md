@@ -1,6 +1,7 @@
 # EasyModularScripts
 Tools to help me easily add scripts to make my unix workflow faster
 
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/2bd5dc2b-8df2-4731-b1f2-cf6104989f73)
 
 ## Setup
 1. git clone this into your favorite location for scripts
