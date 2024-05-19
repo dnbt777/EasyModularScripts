@@ -9,6 +9,8 @@ Tools to help me easily add scripts to make my unix workflow faster
 ## Scripts included
 - `ask`   : make gpt4o output an answer in as few chars as possible
 - `runit` : runs the previous `ask` output as a command in the current working dir
+- 
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/5ff76e61-92c3-4d7c-9c53-0e93a4a07c8a)
 
 
 ## Setup
