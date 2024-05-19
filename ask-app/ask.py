@@ -21,7 +21,7 @@ def main():
         sys.exit(1)
 
     # Combine the system prompt with the user prompt
-    system_prompt = "Answer in as few characters as possible. No formatting tokens such as ` or ```, just the raw answer"
+    system_prompt = "Answer in as few characters as possible. No formatting tokens such as ` or ```"
     user_prompt = ' '.join(sys.argv[1:])
     combined_prompt = f"{system_prompt}\n{user_prompt}"
 
