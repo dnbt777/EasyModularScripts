@@ -5,6 +5,12 @@ Tools to help me easily add scripts to make my unix workflow faster
   <img src="https://github.com/dnbt777/EasyModularScripts/assets/169108635/2bd5dc2b-8df2-4731-b1f2-cf6104989f73" width="300" height="300">
 </p>
 
+
+## Scripts included
+- `ask`   : make gpt4o output an answer in as few chars as possible
+- `runit` : runs the previous `ask` output as a command in the current working dir
+
+
 ## Setup
 1. git clone this into your favorite location for scripts
 2. run `python3 update-all.py` to add aliases to bashrc
