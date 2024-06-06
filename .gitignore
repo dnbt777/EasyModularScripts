@@ -2,6 +2,9 @@
 **/.env
 .env
 
+ask-app/last_output.log
+*.log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
