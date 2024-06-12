@@ -12,7 +12,8 @@ aliases = {
     "zipvids": f"mts-zipvids",
 
     # ai tools
-    "gmfp": f"bash {current_dir}/ai-tools/get_multifile_prompt.sh",
+    "gmfp": f"bash {current_dir}/ai-tools/get_multifile_prompt.sh", # get multifile prompt
+    "cb": f"python3 {current_dir}/ai-tools/copy_codeblock_n.py", # copy codeblock n - usage: cb 0 or cb -2 or cb (default -1))
 
     # Add more aliases as needed
     # "alias_name": "command",
