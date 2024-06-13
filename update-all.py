@@ -80,7 +80,7 @@ def main():
     update_env_files_with_current_dir()
 
     # Reload the .bashrc file to apply changes
-    print("Create a new window to update changes")
+    # print("Create a new window to update changes") # exec bash fixes this
 
 if __name__ == "__main__":
     main()
