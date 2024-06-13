@@ -8,8 +8,9 @@ aliases = {
     "runit": f"bash {current_dir}/ask-app/runit.sh",
 
     # media-tools
-    "mts-zipvids": f"python3 {current_dir}/media-tools/zipvids.py",
+    "mts-zipvids": f"python3 {current_dir}/media-tools/zipmedia.py",
     "zipvids": f"mts-zipvids",
+    "zipmedia": f"mts-zipvids",
 
     # ai tools
     "gmfp": f"bash {current_dir}/ai-tools/get_multifile_prompt.sh", # get multifile prompt
