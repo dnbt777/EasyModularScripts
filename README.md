@@ -34,6 +34,7 @@ easily add scripts/modules
 
 ### media stuff
 - `zipmedia [media1.format] [media2.format] [output file name.output_format]` : returns a side-by-side of media1 and media2. works with video, images, or a combination of both. pads to the longest vid. requires ffmpeg.
+
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/15fd08bc-cde5-4486-9b9c-c7dc60a71896)
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/20723bbc-6ed7-4f28-91c5-1265f3e6d442)
 
