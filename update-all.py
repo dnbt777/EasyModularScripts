@@ -1,5 +1,5 @@
 import os
-from aliases_config import aliases
+from aliases_config import aliases, easy_modular_scripts_dir
 
 def add_or_update_alias_in_bashrc(alias_name, command):
     bashrc_path = os.path.expanduser("~/.bashrc")
@@ -26,7 +26,7 @@ def add_or_update_alias_in_bashrc(alias_name, command):
 def add_current_dir_to_bashrc():
     bashrc_path = os.path.expanduser("~/.bashrc")
     current_dir = os.getcwd()
-    env_var_line = f"export EasyModularScriptsDir='{current_dir}'\n"
+    env_var_line = f"export EasyModularScriptsDir='{easy_modular_scripts_dir}'\n"
 
     # Read the current .bashrc content
     if os.path.exists(bashrc_path):

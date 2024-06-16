@@ -2,6 +2,8 @@ import os
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
+easy_modular_scripts_dir = current_dir
+
 aliases = {
     # ask-app
     "ask": f"python3 {current_dir}/ask-app/ask.py",
@@ -25,6 +27,7 @@ aliases = {
 
     # meta stuff
     "update-aliases":f"python3 {current_dir}/update-all.py;exec bash",
+    "emsupdate":f"update-aliases",
 
 
     # git stuff
