@@ -26,6 +26,10 @@ aliases = {
     # meta stuff
     "update-aliases":f"python3 {current_dir}/update-all.py;exec bash",
 
+
+    # git stuff
+    "gitclone":f"bash {current_dir}/git/gitclone.sh",
+
     # Add more aliases as needed
     # "alias_name": "command",
 }
