@@ -31,7 +31,9 @@ aliases = {
 
 
     # git stuff
-    "gitclone":f"bash {current_dir}/git/gitclone.sh",
+    "gitclone":f"bash {current_dir}/git/gitclone.sh", # gitclones using ssh an dcurrently logged in user
+    "gitpushall":f"bash {current_dir}/git/gitpushall.sh", # usage: gitpushall msg -> adds . commits w msg and pushes
+    "gpa":"gitpushall",
 
     # Add more aliases as needed
     # "alias_name": "command",
