@@ -9,10 +9,13 @@ aliases = {
     "ask": f"python3 {current_dir}/ask-app/ask.py",
     "runit": f"bash {current_dir}/ask-app/runit.sh",
 
-    # media-tools
+    # content creation-tools
     "mts-zipvids": f"python3 {current_dir}/media-tools/zipmedia.py",
     "zipvids": f"mts-zipvids",
     "zipmedia": f"mts-zipvids",
+
+    "md2doc":f"python3 {current_dir}/media-tools/markdown_from_clipboard_to_docx.py",
+    "mdtodoc":f"md2doc",
 
     # ai tools
     "gmfp": f"bash {current_dir}/ai-tools/get_multifile_prompt.sh", # get multifile prompt
