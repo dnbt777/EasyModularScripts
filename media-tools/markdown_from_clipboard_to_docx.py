@@ -16,6 +16,12 @@ def parse_markdown(md_text):
             parsed_lines.append(('heading2', line[3:]))
         elif line.startswith('### '):
             parsed_lines.append(('heading3', line[4:]))
+        elif line.startswith('#### '):
+            parsed_lines.append(('heading4', line[5:]))
+        elif line.startswith('##### '):
+            parsed_lines.append(('heading5', line[6:]))
+        elif line.startswith('###### '):
+            parsed_lines.append(('heading6', line[7:]))
         elif line.startswith('* '):
             parsed_lines.append(('list_item', line[2:]))
         elif re.match(r'\d+\.\s', line):
@@ -53,6 +59,15 @@ def add_to_document(doc, parsed_lines):
         elif line_type == 'heading3':
             p = doc.add_heading(level=3)
             apply_formatting(p, content)
+        elif line_type == 'heading4':
+            p = doc.add_heading(level=4)
+            apply_formatting(p, content)
+        elif line_type == 'heading5':
+            p = doc.add_heading(level=5)
+            apply_formatting(p, content)
+        elif line_type == 'heading6':
+            p = doc.add_heading(level=6)
+            apply_formatting(p, content)
         elif line_type == 'list_item':
             p = doc.add_paragraph(style='List Bullet')
             apply_formatting(p, content)
@@ -88,4 +103,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

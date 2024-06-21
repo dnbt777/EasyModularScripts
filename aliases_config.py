@@ -16,6 +16,7 @@ aliases = {
 
     "md2doc":f"python3 {current_dir}/media-tools/markdown_from_clipboard_to_docx.py",
     "mdtodoc":f"md2doc",
+    "md2pdf":f"python3 {current_dir}/media-tools/markdown_from_clipboard_to_pdf.py",
 
     # ai tools
     "gmfp": f"bash {current_dir}/ai-tools/get_multifile_prompt.sh", # get multifile prompt
