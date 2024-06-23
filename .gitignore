@@ -1,6 +1,8 @@
 *.env
 **/.env
 .env
+ai-tools/multicoder*
+ai-tools/multicode*
 
 ask-app/last_output.log
 *.log
