@@ -36,7 +36,8 @@ It creates a workspace for each project, and stores all progress in there, rathe
 
 
  - `mc get [generation count] [glob match pattern] [-r]` : Have an LLM produce [generation count] generations of changes to your project. Opens a prompt window where you type in your prompt (instructions OR paste an error in). A system prompt, along with any files matching the glob pattern (-r for recursive) are automatically sent off with your prompt.
-  ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/80326825-bcb1-443c-b89b-58959b97ae0a)
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/f696f3b6-f979-48ae-ad35-659032edc409)
+
 
  - `mc write list` : Shows available LLM completions you can write
  - `mc write [n]` : Automatically creates/updates all files from an LLM completion
