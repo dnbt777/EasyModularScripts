@@ -18,6 +18,29 @@ easily add scripts/modules
 
 
 ### speed up coding w LLMs
+#### multicoder
+
+Multicoder allows you to quickly create/edit multi-file projects with LLMs.
+
+It has (simple) local version control (for backups and managing multiple generations)
+
+It also has cost tracking so you know how much you're spending
+
+
+ - `mc get [generation count] [glob match pattern] [-r]` : Have an LLM produce [generation count] generations of changes to your project. Opens a prompt window where you type in your prompt (instructions OR paste an error in). A system prompt, along with any files matching the glob pattern (-r for recursive) are automatically sent off with your prompt.
+ - `mc write list` : Shows available LLM completions you can write
+ - `mc write [n]` : Automatically creates/updates all files from an LLM completion
+ - `mc undo` : Undoes writing a completion
+ - `mc rollback` : rolls back to a previous version (may break bc i havent tested it enough)
+ - `mc backup` : backs up the current dir to a .zip file in the workspace folder (may break, seemed to work ok but needs more thorough testing)
+
+the idea is that you can use some of the ideas in this paper https://eureka-research.github.io/ to exponentially increase the odds of generating what you want.
+
+additionally, LLMs are good at generating complex programs if you get there one step at a time. this program helps automate most of the friction in doing that.
+
+
+
+#### old
  - `gmfp [filename pattern match]` : Get Multi-File Prompt turns multiple files into a prompt and auto copies to clipboard. e.g. `gmfp *` turns all files in cwd into 1 prompt
  - `gcb [n]`: Get Code Block gets the nth code block of a prompt in the clipboard. Default n is -1 (last codeblock)
  - `mkfiles [folder]`: If the clipboard contains an LLM response w multiple files, it creates them all, including dirs
