@@ -22,14 +22,25 @@ easily add scripts/modules
 
 Multicoder allows you to quickly create/edit multi-file projects with LLMs.
 
-It has (simple) local version control (for backups and managing multiple generations)
+It has (simple) local version control and frictionless commands to manage the state (for backups and managing multiple generations)
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/ca748263-2be9-4c87-9858-504d2e0bf255)
+
 
 It also has cost tracking so you know how much you're spending
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/b4fa506a-5191-4911-8b7d-f7ff8ccb7804)
+
+It creates a workspace for each project, and stores all progress in there, rather than in memory, so you can easily pickup where you left off on multiple projects.
+
 
 
  - `mc get [generation count] [glob match pattern] [-r]` : Have an LLM produce [generation count] generations of changes to your project. Opens a prompt window where you type in your prompt (instructions OR paste an error in). A system prompt, along with any files matching the glob pattern (-r for recursive) are automatically sent off with your prompt.
+  ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/80326825-bcb1-443c-b89b-58959b97ae0a)
+
  - `mc write list` : Shows available LLM completions you can write
  - `mc write [n]` : Automatically creates/updates all files from an LLM completion
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/edf8240b-dafa-4f98-8fe5-ad09ab12ddac)
+
+
  - `mc undo` : Undoes writing a completion
  - `mc rollback` : rolls back to a previous version (may break bc i havent tested it enough)
  - `mc backup` : backs up the current dir to a .zip file in the workspace folder (may break, seemed to work ok but needs more thorough testing)
