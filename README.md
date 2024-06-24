@@ -56,6 +56,11 @@ additionally, LLMs are good at generating complex programs if you get there one 
 
 
 ### media stuff
+
+- `videdit` : opens a simple video editor that cuts segments out of your videos. run it and go to http://127.0.0.1:5000.
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/6df0cd57-8893-466a-b6ab-01eafe7c2d84)
+
+
 - `zipmedia [media1.format] [media2.format] [output file name.output_format]` : returns a side-by-side of media1 and media2. works with video, images, or a combination of both. pads to the longest vid. requires ffmpeg.
 
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/15fd08bc-cde5-4486-9b9c-c7dc60a71896)
