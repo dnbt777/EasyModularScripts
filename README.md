@@ -23,10 +23,12 @@ easily add scripts/modules
 Multicoder allows you to quickly create/edit multi-file projects with LLMs.
 
 It has (simple) local version control and frictionless commands to manage the state (for backups and managing multiple generations)
+
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/ca748263-2be9-4c87-9858-504d2e0bf255)
 
 
 It also has cost tracking so you know how much you're spending
+
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/b4fa506a-5191-4911-8b7d-f7ff8ccb7804)
 
 It creates a workspace for each project, and stores all progress in there, rather than in memory, so you can easily pickup where you left off on multiple projects.
