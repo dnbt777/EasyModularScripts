@@ -35,7 +35,7 @@ It creates a workspace for each project, and stores all progress in there, rathe
 
 
 
- - `mc get [generation count] [glob match pattern] [-r]` : Have an LLM produce [response generation number] instances of changes to your project. Opens an nvim buffer where you type in your prompt (instructions OR paste an error in). A system prompt, along with any files matching the glob pattern (-r for recursive) are automatically sent off with your prompt.
+ - `mc get [generation count] [glob match pattern] [-r]` : Have an LLM produce [response generation number] instances of changes to your project. Opens an nvim buffer where you type in your prompt (instructions OR paste an error in) (i to start typing, esc->:wq to save and submit). A system prompt, along with any files matching the glob pattern (-r for recursive) are automatically sent off with your prompt.
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/f696f3b6-f979-48ae-ad35-659032edc409)
 
 
