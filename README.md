@@ -20,7 +20,7 @@ easily add scripts/modules
 ### speed up coding w LLMs
 #### multicoder
 
-Multicoder allows you to quickly create/edit multi-file projects with LLMs.
+Multicoder allows you to quickly create/edit multi-file projects with LLMs, all inside your terminal
 
 It has (simple) local version control and frictionless commands to manage the state (for backups and managing multiple generations)
 
