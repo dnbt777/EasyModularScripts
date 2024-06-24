@@ -1,8 +1,10 @@
 *.env
 **/.env
 .env
-ai-tools/multicoder*
-ai-tools/multicode*
+
+media-tools/videoeditor/downloads/*
+media-tools/videoeditor/uploads/*
+media-tools/videoeditor/temp/*
 
 ask-app/last_output.log
 *.log

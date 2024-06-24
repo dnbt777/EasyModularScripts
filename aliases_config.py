@@ -18,6 +18,9 @@ aliases = {
     "mdtodoc":f"md2doc",
     "md2pdf":f"python3 {current_dir}/media-tools/markdown_from_clipboard_to_pdf.py",
 
+    # browser based video editor
+    "videdit":f"python3 {current_dir}/media-tools/videoeditor/main.py",
+
     "streamer-mode":f"python3 {current_dir}/media-tools/streamer_mode.py",
     "strmode":"streamer-mode",
 
