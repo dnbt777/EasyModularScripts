@@ -52,6 +52,8 @@ the idea is that you can use some of the ideas in this paper https://eureka-rese
 
 additionally, LLMs are good at generating complex programs if you get there one step at a time. this program helps automate most of the friction in doing that.
 
+to set it up, rename .env-example to .env and add relevant API keys in
+
 
 
 #### old
