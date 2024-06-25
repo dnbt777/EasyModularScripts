@@ -47,7 +47,8 @@ It creates a workspace for each project, and stores all progress in there, rathe
 
 - `mc ignore 'pattern'` : Always ignores files with this pattern (for this workspace). Config is in .mcoder-workspace/.mcignore.
 - `mc rmignore 'pattern'` : Removes pattern from .mcignore.
-- `mc lsignores` : Lists all patterns in .mcignore.mc get 
+- `mc lsignores` : Lists all patterns in .mcignore.
+
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/812bb177-f134-43f4-b2e8-1e41ef74602d)
 
 
