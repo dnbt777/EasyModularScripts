@@ -1,10 +1,11 @@
+
 import sys
 import os
 import shutil
 from get import handle_get
 from write import handle_write, list_responses
 from rollback import handle_rollback
-from utils import clear_workspace, create_backup, undo_last_write, backup_current_state
+from utils import clear_workspace, create_backup, undo_last_write, backup_current_state, ignore, unignore, lsignores
 
 def main():
     if len(sys.argv) < 2:
@@ -56,6 +57,20 @@ def main():
         create_backup(backup_name)
     elif command == "undo":
         undo_last_write()
+    elif command == "ignore":
+        if len(sys.argv) < 3:
+            print("Usage: mcoder ignore [pattern]")
+            sys.exit(1)
+        pattern = sys.argv[2]
+        ignore(pattern)
+    elif command == "rmignore":
+        if len(sys.argv) < 3:
+            print("Usage: mcoder rmignore [pattern]")
+            sys.exit(1)
+        pattern = sys.argv[2]
+        unignore(pattern)
+    elif command in ["lsignores", "lsignore"]:
+        lsignores()
     else:
         print(f"Unknown command: {command}")
         sys.exit(1)

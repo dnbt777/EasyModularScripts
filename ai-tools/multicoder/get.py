@@ -2,22 +2,8 @@ import os
 import glob
 import shutil
 from aiqs import ModelInterface
-from utils import create_version_folder, save_response, log_cost, get_user_instructions_from_nvim
+from utils import create_version_folder, save_response, log_cost, get_user_instructions_from_nvim, read_mcignore, gather_files
 from system_prompt import SYSTEM_PROMPT
-
-def gather_files(pattern, recursive):
-    all_files = []
-    for root, _, files in os.walk('.'):
-        if '.mcoder-workspace' in root:
-            continue
-        for file in files:
-            file_path = os.path.join(root, file)
-            all_files.append(file_path)
-    if recursive:
-        matching_files = [f for f in all_files if glob.fnmatch.fnmatch(f, pattern)]
-    else:
-        matching_files = [f for f in all_files if glob.fnmatch.fnmatch(os.path.basename(f), pattern)]
-    return matching_files
 
 def handle_get(llm_count, pattern, recursive, user_instructions=None):
     if user_instructions is None:
@@ -41,9 +27,14 @@ def handle_get(llm_count, pattern, recursive, user_instructions=None):
 
     prompt = SYSTEM_PROMPT + "\n" + user_instructions
     for file in files:
-        with open(file, 'r') as f:
-            content = f.read()
-        prompt += f'\n<file path="{file}">{content}</file>'
+        try:
+            with open(file, 'r', encoding='utf-8') as f:
+                content = f.read()
+            prompt += f'\n<file path="{file}">{content}</file>'
+        except UnicodeDecodeError as e:
+            print(f"Error reading file {file}: {e}")
+            print(f"Suggestion: Run 'mc ignore {file}' to ignore this file in future operations.")
+            continue
 
     modelinterface = ModelInterface()
     for i in range(llm_count):
@@ -53,3 +44,4 @@ def handle_get(llm_count, pattern, recursive, user_instructions=None):
         log_cost(modelinterface.cost_tracker.cost_data[-1])  # Log the latest cost data
 
     print(f"Responses saved in {response_folder}")
+

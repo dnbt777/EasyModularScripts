@@ -1,9 +1,13 @@
+
 import os
 import re
 import csv
 import shutil
 import zipfile
 import subprocess
+import glob
+import fnmatch
+
 
 def create_version_folder():
     workspace = ".mcoder-workspace"
@@ -106,7 +110,6 @@ def undo_last_write():
         print("No backup found to undo.")
         return
 
-    # Restore files from backup
     for root, _, files in os.walk(backup_folder):
         for file in files:
             backup_file_path = os.path.join(root, file)
@@ -115,7 +118,6 @@ def undo_last_write():
             os.makedirs(os.path.dirname(original_file_path), exist_ok=True)
             shutil.copy(backup_file_path, original_file_path)
 
-    # Remove files that were created after the backup
     for root, _, files in os.walk('.'):
         if '.mcoder-workspace' in root:
             continue
@@ -137,3 +139,112 @@ def get_user_instructions_from_nvim():
         user_instructions = f.read()
     os.remove(temp_file)
     return user_instructions
+
+def read_mcignore():
+    workspace = ".mcoder-workspace"
+    mcignore_path = os.path.join(workspace, ".mcignore")
+    if not os.path.exists(mcignore_path):
+        # Create default .mcignore with __pycache__
+        with open(mcignore_path, 'w') as f:
+            f.write("__pycache__\n")
+    with open(mcignore_path, 'r') as f:
+        return [line.strip() for line in f if line.strip() and not line.startswith('#')]
+
+def ignore(pattern):
+    workspace = ".mcoder-workspace"
+    mcignore_path = os.path.join(workspace, ".mcignore")
+    os.makedirs(workspace, exist_ok=True)
+    
+    # Create .mcignore file if it doesn't exist
+    if not os.path.exists(mcignore_path):
+        with open(mcignore_path, 'w') as f:
+            f.write("__pycache__\n")
+    
+    with open(mcignore_path, 'r') as f:
+        patterns = f.read().splitlines()
+    
+    if pattern not in patterns:
+        with open(mcignore_path, 'a') as f:
+            f.write(f"\n{pattern}")
+        print(f"Added '{pattern}' to .mcignore")
+    else:
+        print(f"'{pattern}' is already in .mcignore")
+
+
+def unignore(pattern):
+    workspace = ".mcoder-workspace"
+    mcignore_path = os.path.join(workspace, ".mcignore")
+    if not os.path.exists(mcignore_path):
+        print("No .mcignore file found.")
+        return
+    with open(mcignore_path, 'r') as f:
+        lines = f.readlines()
+    with open(mcignore_path, 'w') as f:
+        removed = False
+        for line in lines:
+            if line.strip() != pattern:
+                f.write(line)
+            else:
+                removed = True
+    if removed:
+        print(f"Removed '{pattern}' from .mcignore")
+    else:
+        print(f"Pattern '{pattern}' not found in .mcignore")
+
+def lsignores():
+    workspace = ".mcoder-workspace"
+    mcignore_path = os.path.join(workspace, ".mcignore")
+    if not os.path.exists(mcignore_path):
+        print("No .mcignore file found.")
+        return
+    with open(mcignore_path, 'r') as f:
+        ignores = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+    if ignores:
+        print("Current ignore patterns:")
+        for ignore in ignores:
+            print(f"- {ignore}")
+    else:
+        print("No ignore patterns found.")
+
+def should_ignore(file_path, ignore_patterns):
+    normalized_path = os.path.normpath(file_path)
+    for pattern in ignore_patterns:
+        # Check for exact match
+        if fnmatch.fnmatch(normalized_path, pattern):
+            return True
+        
+        # Check for directory match (e.g., "dir" should match "dir/*")
+        if os.path.isdir(normalized_path) and fnmatch.fnmatch(normalized_path + '/*', pattern):
+            return True
+        
+        # Check for file in directory match (e.g., "dir" should match "./dir/file.txt")
+        if fnmatch.fnmatch(os.path.dirname(normalized_path), pattern):
+            return True
+        
+        # Check for pattern without leading "./" (e.g., "dir/file.txt" should match "./dir/file.txt")
+        if normalized_path.startswith('./') and fnmatch.fnmatch(normalized_path[2:], pattern):
+            return True
+        
+        # Check for subdirectory match (e.g., "wandb" should match "path/to/wandb/file.txt")
+        path_parts = normalized_path.split(os.sep)
+        if any(part == pattern for part in path_parts):
+            return True
+    
+    return False
+
+def gather_files(pattern, recursive):
+    all_files = []
+    ignore_patterns = read_mcignore()
+    for root, dirs, files in os.walk('.'):
+        if '.mcoder-workspace' in root or should_ignore(root, ignore_patterns):
+            dirs[:] = []  # Skip this directory
+            continue
+        for file in files:
+            file_path = os.path.join(root, file)
+            if not should_ignore(file_path, ignore_patterns):
+                all_files.append(file_path)
+    if recursive:
+        matching_files = [f for f in all_files if glob.fnmatch.fnmatch(f, pattern)]
+    else:
+        matching_files = [f for f in all_files if glob.fnmatch.fnmatch(os.path.basename(f), pattern)]
+    return matching_files

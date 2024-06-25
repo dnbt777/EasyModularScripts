@@ -2,6 +2,9 @@
 **/.env
 .env
 
+.mcoder-workspace
+*.mcoder-workspace
+
 media-tools/videoeditor/downloads/*
 media-tools/videoeditor/uploads/*
 media-tools/videoeditor/temp/*
