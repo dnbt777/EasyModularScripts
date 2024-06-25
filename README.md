@@ -45,6 +45,14 @@ It creates a workspace for each project, and stores all progress in there, rathe
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/edf8240b-dafa-4f98-8fe5-ad09ab12ddac)
 
 
+- `mc addignore 'pattern'` : Always ignores files with this pattern (for this workspace). Config is in .mcoder-workspace/.mcignore.
+- `mc rmignore 'pattern'` : Removes pattern from .mcignore.
+- 
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/31829459-9912-484c-8658-600ca7564d7b)
+
+(mc and mcoder are the same)
+
+
  - `mc undo` : Undoes writing a completion
  - `mc rollback` : rolls back to a previous version (may break bc i havent tested it enough)
  - `mc backup` : backs up the current dir to a .zip file in the workspace folder (may break, seemed to work ok but needs more thorough testing)
