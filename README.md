@@ -35,13 +35,22 @@ It creates a workspace for each project, and stores all progress in there, rathe
 
 
 
- - `mc get [generation count] [glob match pattern] [-r]` : Have an LLM produce [generation count] generations of changes to your project. Opens a prompt window where you type in your prompt (instructions OR paste an error in). A system prompt, along with any files matching the glob pattern (-r for recursive) are automatically sent off with your prompt.
+ - `mc get [generation count] [glob match pattern] [-r]` : Have an LLM produce [response generation number] instances of changes to your project. Opens an nvim buffer where you type in your prompt (instructions OR paste an error in) (i to start typing, esc->:wq to save and submit). A system prompt, along with any files matching the glob pattern (-r for recursive) are automatically sent off with your prompt.
+ - 
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/f696f3b6-f979-48ae-ad35-659032edc409)
 
 
  - `mc write list` : Shows available LLM completions you can write
  - `mc write [n]` : Automatically creates/updates all files from an LLM completion
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/edf8240b-dafa-4f98-8fe5-ad09ab12ddac)
+
+
+- `mc ignore 'pattern'` : Always ignores files with this pattern (for this workspace). Config is in .mcoder-workspace/.mcignore.
+- `mc rmignore 'pattern'` : Removes pattern from .mcignore.
+- `mc lsignores` : Lists all patterns in .mcignore.
+
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/812bb177-f134-43f4-b2e8-1e41ef74602d)
+
 
 
  - `mc undo` : Undoes writing a completion
