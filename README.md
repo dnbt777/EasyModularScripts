@@ -45,12 +45,11 @@ It creates a workspace for each project, and stores all progress in there, rathe
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/edf8240b-dafa-4f98-8fe5-ad09ab12ddac)
 
 
-- `mc addignore 'pattern'` : Always ignores files with this pattern (for this workspace). Config is in .mcoder-workspace/.mcignore.
+- `mc ignore 'pattern'` : Always ignores files with this pattern (for this workspace). Config is in .mcoder-workspace/.mcignore.
 - `mc rmignore 'pattern'` : Removes pattern from .mcignore.
-- 
-![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/31829459-9912-484c-8658-600ca7564d7b)
+- `mc lsignores` : Lists all patterns in .mcignore.mc get 
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/812bb177-f134-43f4-b2e8-1e41ef74602d)
 
-(mc and mcoder are the same)
 
 
  - `mc undo` : Undoes writing a completion
