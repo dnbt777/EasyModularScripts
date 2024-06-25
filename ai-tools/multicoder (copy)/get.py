@@ -25,23 +25,20 @@ def handle_get(llm_count, pattern, recursive, user_instructions=None):
             print(f"PermissionError: {e}")
             continue
 
-    prompt = SYSTEM_PROMPT + "\n"
-    prompt += f'<user instructions>\n{user_instructions}\n</user instructions>\n'
-    prompt += '<project files>\n'
+    prompt = SYSTEM_PROMPT + "\n" + user_instructions
     for file in files:
         try:
             with open(file, 'r', encoding='utf-8') as f:
                 content = f.read()
-            prompt += f'<file path="{file}">{content}</file>\n'
+            prompt += f'\n<file path="{file}">{content}</file>'
         except UnicodeDecodeError as e:
             print(f"Error reading file {file}: {e}")
             print(f"Suggestion: Run 'mc ignore {file}' to ignore this file in future operations.")
             continue
-    prompt += '</project files>'
 
     modelinterface = ModelInterface()
     for i in range(llm_count):
-        response = modelinterface.send_to_ai(prompt, model="sonnet3.5", max_tokens=4*4095)
+        response = modelinterface.send_to_ai(prompt, model="sonnet3.5", max_tokens=4095)
         response_text = response[0]  # Extract the actual response text from the tuple
         save_response(response_folder, i, response_text)
         log_cost(modelinterface.cost_tracker.cost_data[-1])  # Log the latest cost data
