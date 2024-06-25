@@ -47,6 +47,11 @@ aliases = {
     "gitpushall":f"bash {current_dir}/git/gitpushall.sh", # usage: gitpushall msg -> adds . commits w msg and pushes
     "gpa":"gitpushall",
 
+
+    # misc
+    "getfilelist":f"python3 {current_dir}/misc-tools/list_files.py"
+
+
     # Add more aliases as needed
     # "alias_name": "command",
 }
