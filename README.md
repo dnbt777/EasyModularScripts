@@ -18,6 +18,54 @@ easily add scripts/modules
 
 
 ### speed up coding w LLMs
+#### multicoder
+
+Multicoder allows you to quickly create/edit multi-file projects with LLMs, all inside your terminal
+
+It has (simple) local version control and frictionless commands to manage the state (for backups and managing multiple generations)
+
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/ca748263-2be9-4c87-9858-504d2e0bf255)
+
+
+It also has cost tracking so you know how much you're spending
+
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/b4fa506a-5191-4911-8b7d-f7ff8ccb7804)
+
+It creates a workspace for each project, and stores all progress in there, rather than in memory, so you can easily pickup where you left off on multiple projects.
+
+
+
+ - `mc get [generation count] [glob match pattern] [-r]` : Have an LLM produce [response generation number] instances of changes to your project. Opens an nvim buffer where you type in your prompt (instructions OR paste an error in) (i to start typing, esc->:wq to save and submit). A system prompt, along with any files matching the glob pattern (-r for recursive) are automatically sent off with your prompt.
+ - 
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/f696f3b6-f979-48ae-ad35-659032edc409)
+
+
+ - `mc write list` : Shows available LLM completions you can write
+ - `mc write [n]` : Automatically creates/updates all files from an LLM completion
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/edf8240b-dafa-4f98-8fe5-ad09ab12ddac)
+
+
+- `mc ignore 'pattern'` : Always ignores files with this pattern (for this workspace). Config is in .mcoder-workspace/.mcignore.
+- `mc rmignore 'pattern'` : Removes pattern from .mcignore.
+- `mc lsignores` : Lists all patterns in .mcignore.
+
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/812bb177-f134-43f4-b2e8-1e41ef74602d)
+
+
+
+ - `mc undo` : Undoes writing a completion
+ - `mc rollback` : rolls back to a previous version (may break bc i havent tested it enough)
+ - `mc backup` : backs up the current dir to a .zip file in the workspace folder (may break, seemed to work ok but needs more thorough testing)
+
+the idea is that you can use some of the ideas in this paper https://eureka-research.github.io/ to exponentially increase the odds of generating what you want.
+
+additionally, LLMs are good at generating complex programs if you get there one step at a time. this program helps automate most of the friction in doing that.
+
+to set it up, rename .env-example to .env and add relevant API keys in
+
+
+
+#### old
  - `gmfp [filename pattern match]` : Get Multi-File Prompt turns multiple files into a prompt and auto copies to clipboard. e.g. `gmfp *` turns all files in cwd into 1 prompt
  - `gcb [n]`: Get Code Block gets the nth code block of a prompt in the clipboard. Default n is -1 (last codeblock)
  - `mkfiles [folder]`: If the clipboard contains an LLM response w multiple files, it creates them all, including dirs
@@ -33,6 +81,11 @@ easily add scripts/modules
 
 
 ### media stuff
+
+- `videdit` : opens a simple video editor that cuts segments out of your videos. run it and go to http://127.0.0.1:5000.
+![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/6df0cd57-8893-466a-b6ab-01eafe7c2d84)
+
+
 - `zipmedia [media1.format] [media2.format] [output file name.output_format]` : returns a side-by-side of media1 and media2. works with video, images, or a combination of both. pads to the longest vid. requires ffmpeg.
 
 ![image](https://github.com/dnbt777/EasyModularScripts/assets/169108635/15fd08bc-cde5-4486-9b9c-c7dc60a71896)

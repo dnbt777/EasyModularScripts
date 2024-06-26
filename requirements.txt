@@ -1,2 +1,4 @@
 pyperclip
 tqdm
+python-docx
+fpdf

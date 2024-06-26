@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Segment Video Editor</title>
+    <style>
+        #drop-area {
+            border: 2px dashed #ccc;
+            border-radius: 20px;
+            width: 480px;
+            padding: 20px;
+            text-align: center;
+        }
+        #video-player {
+            max-width: 100%;
+            margin-top: 20px;
+        }
+        #error-message {
+            color: red;
+        }
+        #segments-container {
+            margin-top: 20px;
+        }
+        .segment {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="drop-area">
+        <p>Drag and drop a video file here or click to select</p>
+        <input type="file" id="fileElem" accept="video/*" style="display:none">
+    </div>
+    <video id="video-player" controls></video>
+    <div>
+        <button id="add-segment">Add Segment</button>
+        <button id="cut-video">Cut Video</button>
+    </div>
+    <div id="segments-container"></div>
+    <p id="error-message"></p>
+
+    <script>
+        let dropArea = document.getElementById('drop-area');
+        let fileElem = document.getElementById('fileElem');
+        let videoPlayer = document.getElementById('video-player');
+        let addSegmentBtn = document.getElementById('add-segment');
+        let cutVideoBtn = document.getElementById('cut-video');
+        let segmentsContainer = document.getElementById('segments-container');
+        let errorMessage = document.getElementById('error-message');
+
+        let videoFile = null;
+        let segments = [];
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        dropArea.addEventListener('drop', handleDrop, false);
+        dropArea.addEventListener('click', () => fileElem.click());
+        fileElem.addEventListener('change', e => handleFiles(e.target.files));
+
+        function handleDrop(e) {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            videoFile = files[0];
+            uploadFile(videoFile);
+        }
+
+        function uploadFile(file) {
+            let formData = new FormData();
+            formData.append('file', file);
+            fetch('/upload', { method: 'POST', body: formData })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.error) {
+                        throw new Error(result.error);
+                    }
+                    videoPlayer.src = URL.createObjectURL(file);
+                    errorMessage.textContent = '';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    errorMessage.textContent = `Upload error: ${error.message}`;
+                });
+        }
+
+        addSegmentBtn.addEventListener('click', addSegment);
+
+        function addSegment() {
+            let segmentDiv = document.createElement('div');
+            segmentDiv.className = 'segment';
+            segmentDiv.innerHTML = `
+                <input type="number" step="0.01" placeholder="Start time" class="start-time">
+                <input type="number" step="0.01" placeholder="End time" class="end-time">
+                <button class="set-start">Set Start</button>
+                <button class="set-end">Set End</button>
+                <button class="remove-segment">Remove</button>
+            `;
+            segmentsContainer.appendChild(segmentDiv);
+
+            segmentDiv.querySelector('.set-start').addEventListener('click', () => setTime(segmentDiv, 'start'));
+            segmentDiv.querySelector('.set-end').addEventListener('click', () => setTime(segmentDiv, 'end'));
+            segmentDiv.querySelector('.remove-segment').addEventListener('click', () => removeSegment(segmentDiv));
+        }
+
+        function setTime(segmentDiv, type) {
+            let input = segmentDiv.querySelector(type === 'start' ? '.start-time' : '.end-time');
+            input.value = videoPlayer.currentTime.toFixed(2);
+        }
+
+        function removeSegment(segmentDiv) {
+            segmentDiv.remove();
+        }
+
+        cutVideoBtn.addEventListener('click', () => {
+            if (videoFile) {
+                segments = Array.from(segmentsContainer.querySelectorAll('.segment')).map(segment => ({
+                    start: parseFloat(segment.querySelector('.start-time').value),
+                    end: parseFloat(segment.querySelector('.end-time').value)
+                })).filter(segment => !isNaN(segment.start) && !isNaN(segment.end) && segment.start < segment.end);
+
+                if (segments.length === 0) {
+                    errorMessage.textContent = 'Please add at least one valid segment.';
+                    return;
+                }
+
+                let data = {
+                    input_file: videoFile.name,
+                    segments: segments
+                };
+                fetch('/cut', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw new Error(err.error) });
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    let url = window.URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = `cut_${videoFile.name}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    errorMessage.textContent = '';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    errorMessage.textContent = `Cutting error: ${error.message}`;
+                });
+            } else {
+                errorMessage.textContent = 'Please select a video file.';
+            }
+        });
+    </script>
+</body>
+</html>
