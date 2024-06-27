@@ -34,6 +34,7 @@ class CostTracker():
 
 
     def calculate_request_costs(self, model, input_tokens, output_tokens):
+        model = model.split('-')[1]
         model_costs_per_1k_tokens = {
             "haiku" : {
                 "input" : 0.00025,
