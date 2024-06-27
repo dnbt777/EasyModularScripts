@@ -6,6 +6,20 @@ from get import handle_get
 from write import handle_write, list_responses
 from rollback import handle_rollback
 from utils import clear_workspace, create_backup, undo_last_write, backup_current_state, ignore, unignore, lsignores
+from dotenv import load_dotenv
+
+
+load_dotenv()
+try:
+    MODEL = os.environ.get('MODEL')
+    MAX_TOKENS = int(os.environ.get('MAX_TOKENS'))
+except:
+    print("Please set MODEL and MAX_TOKENS in .env")
+    print("See .env-example for an example env.")
+    print("Available models:")
+    for model_string in "gpt-3.5-turbo gpt-4o bedrock-haiku bedrock-sonnet bedrock-opus bedrock-sonnet3.5 anthropic-haiku anthropic-sonnet anthropic-opus anthropic-sonnet3.5".split():
+        print(model_string)
+
 
 def main():
     if len(sys.argv) < 2:
@@ -31,8 +45,7 @@ def main():
         else:
             if len(sys.argv) > 4:
                 user_instructions = ' '.join(sys.argv[4:])
-
-        handle_get(llm_count, pattern, recursive, user_instructions)
+        handle_get(llm_count, pattern, recursive, model=MODEL, max_tokens=MAX_TOKENS, user_instructions=user_instructions)
     elif command == "write":
         if len(sys.argv) < 3:
             print("Usage: mcoder write [m]")
