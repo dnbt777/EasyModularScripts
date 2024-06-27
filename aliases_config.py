@@ -49,6 +49,7 @@ aliases = {
 
 
     # misc
+    # returns list of all files as a string (copy-paste into python or js)
     "getfilelist":f"python3 {current_dir}/misc-tools/list_files.py"
 
 
