@@ -2,8 +2,6 @@ import os
 import re
 from utils import get_latest_version_folder, read_response_file, apply_mcdiff
 
-
-
 def handle_write(m):
     version_folder = get_latest_version_folder()
     response_file = os.path.join(version_folder, "responses", f"response{m}.txt")
@@ -31,7 +29,6 @@ def handle_write(m):
             apply_mcdiff(file_path, diff_content)
 
     print(f"Files updated from {response_file}")
-
 
 def list_responses():
     version_folder = get_latest_version_folder()

@@ -247,6 +247,7 @@ def gather_files(pattern, recursive):
     return matching_files
 
 
+
 def apply_mcdiff(file_path, diff_content):
     with open(file_path, 'r', encoding='utf-8') as f:
         file_data = f.read()
@@ -255,12 +256,19 @@ def apply_mcdiff(file_path, diff_content):
     replacements = replace_pattern.findall(diff_content)
 
     for old, new in replacements:
-        file_data = file_data.replace(old, new)
+        # Normalize whitespace in the old and new text
+        old_normalized = re.sub(r'\s+', ' ', old.strip())
+        new_normalized = re.sub(r'\s+', ' ', new.strip())
 
+        # Normalize whitespace in the file data
+        file_data_normalized = re.sub(r'\s+', ' ', file_data)
+
+        # Perform the replacement
+        if old_normalized in file_data_normalized:
+            file_data_normalized = file_data_normalized.replace(old_normalized, new_normalized)
+        else:
+            print(f"Warning: Could not find the text to replace in {file_path}")
+
+    # Write the updated content back to the file
     with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(file_data)
-    
-    print(f"Changed {file_path}")
-
-
-
+        f.write(file_data_normalized)
