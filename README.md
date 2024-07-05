@@ -34,6 +34,8 @@ It also has cost tracking so you know how much you're spending
 It creates a workspace for each project, and stores all progress in there, rather than in memory, so you can easily pickup where you left off on multiple projects.
 
 
+(use mcb for beta - currently uses diffs instead of writing out full files)
+
 
  - `mc get [generation count] [glob match pattern] [-r]` : Have an LLM produce [response generation number] instances of changes to your project. Opens an nvim buffer where you type in your prompt (instructions OR paste an error in) (i to start typing, esc->:wq to save and submit). A system prompt, along with any files matching the glob pattern (-r for recursive) are automatically sent off with your prompt.
  - 
