@@ -11,6 +11,7 @@ media-tools/videoeditor/temp/*
 
 ask-app/last_output.log
 *.log
+conversation_history.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
