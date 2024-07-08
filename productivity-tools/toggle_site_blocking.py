@@ -1,6 +1,7 @@
 import sys
 import subprocess
 import time
+import platform
 
 # Set the time delay to 5 minutes (300 seconds)
 TIME_DELAY = 300
@@ -60,16 +61,25 @@ def list_blocked_sites():
             if line.strip().startswith(BLOCKED_IP):
                 print(line.strip())
 
-def restart_services():
-    try:
-        subprocess.run(['sudo', 'systemctl', 'restart', 'systemd-resolved'], check=True)
-    except subprocess.CalledProcessError:
-        pass
 
-    try:
-        subprocess.run(['sudo', 'service', 'NetworkManager', 'restart'], check=True)
-    except subprocess.CalledProcessError:
-        pass
+def restart_services():
+    system = platform.system()
+    
+    if system == 'Linux':
+        try:
+            subprocess.run(['sudo', 'systemctl', 'restart', 'systemd-resolved'], check=True)
+        except subprocess.CalledProcessError:
+            pass
+
+        try:
+            subprocess.run(['sudo', 'service', 'NetworkManager', 'restart'], check=True)
+        except subprocess.CalledProcessError:
+            pass
+    elif system == 'Darwin':  # macOS
+        try:
+            subprocess.run(['sudo', 'killall', '-HUP', 'mDNSResponder'], check=True)
+        except subprocess.CalledProcessError:
+            pass
 
 def main():
     if len(sys.argv) != 2:
@@ -98,3 +108,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
