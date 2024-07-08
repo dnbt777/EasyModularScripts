@@ -39,7 +39,6 @@ def handle_get(llm_count, pattern, recursive, model=None, max_tokens=4095, user_
             continue
     prompt += '</project files>'
     
-    print(model, "Hello World!")
 
     modelinterface = ModelInterface()
     for i in range(llm_count):
