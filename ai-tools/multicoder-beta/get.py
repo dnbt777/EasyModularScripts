@@ -8,7 +8,7 @@ from system_prompt import SYSTEM_PROMPT
 def handle_get(llm_count, pattern, recursive, model=None, max_tokens=4095, user_instructions=None):
     if user_instructions is None:
         user_instructions = get_user_instructions_from_nvim()
-
+        
     version_folder = create_version_folder()
     backup_folder = os.path.join(version_folder, "backup")
     response_folder = os.path.join(version_folder, "responses")
@@ -38,12 +38,18 @@ def handle_get(llm_count, pattern, recursive, model=None, max_tokens=4095, user_
             print(f"Suggestion: Run 'mc ignore {file}' to ignore this file in future operations.")
             continue
     prompt += '</project files>'
+    
+    print(model, "Hello World!")
 
     modelinterface = ModelInterface()
     for i in range(llm_count):
         response = modelinterface.send_to_ai(prompt, model=model, max_tokens=max_tokens)
         response_text = response[0]  # Extract the actual response text from the tuple
         save_response(response_folder, i, response_text)
-        log_cost(modelinterface.cost_tracker.cost_data[-1])  # Log the latest cost data
-
+        try:
+            log_cost(modelinterface.cost_tracker.cost_data[-1])  # Log the latest cost data for anthropic models
+        except:
+            print("Error logging cost")
+            
+      
     print(f"Responses saved in {response_folder}")
