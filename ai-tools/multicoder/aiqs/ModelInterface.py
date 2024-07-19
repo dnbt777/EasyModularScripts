@@ -140,6 +140,7 @@ class ModelInterface():
                 max_tokens=max_tokens,
                 temperature=temperature
             )
+            print(response)
             result_text = response.choices[0].message.content
             input_tokens = response.usage.prompt_tokens
             output_tokens = response.usage.completion_tokens
@@ -172,8 +173,8 @@ class ModelInterface():
                 ]
             )
             result_text = response.content[0].text
-            input_tokens = response.usage.input_tokens
-            output_tokens = response.usage.output_tokens
+            input_tokens = response.usage.prompt_tokens
+            output_tokens = response.usage.completion_tokens
             metrics = {
                 "inputTokenCount": input_tokens,
                 "outputTokenCount": output_tokens,
@@ -196,8 +197,9 @@ class ModelInterface():
                 result_text, metrics = self.invoke_claude_3_with_stream(prompt, model=model, max_tokens=max_tokens)
             # Update cost data for Claude models
             self.cost_tracker.add_request_metrics_to_cost_data(metrics)
-        elif model in ["gpt-4o", "gpt-3.5-turbo"]:
+        elif model in ["gpt-4o", "gpt-3.5-turbo", "gpt-4o-mini"]:
             result_text, metrics = self.invoke_openai_chat_model(prompt, model, max_tokens=max_tokens, temperature=temperature)
+            self.cost_tracker.add_request_metrics_to_cost_data(metrics)
         elif model.startswith("anthropic-"):
             result_text, metrics = self.invoke_anthropic_chat_model(prompt, model, max_tokens=max_tokens, temperature=temperature)
         else:

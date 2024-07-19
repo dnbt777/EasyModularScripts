@@ -34,7 +34,8 @@ class CostTracker():
 
 
     def calculate_request_costs(self, model, input_tokens, output_tokens):
-        model = model.split('-')[1]
+        if ("anthropic" in model) or ("bedrock" in model):
+            model = model.split('-')[1]
         model_costs_per_1k_tokens = {
             "haiku" : {
                 "input" : 0.00025,
@@ -51,6 +52,18 @@ class CostTracker():
             "sonnet3.5" : {
                 "input" : 0.003,
                 "output": 0.015,
+            },
+            "gpt-4o" : {
+                "input" : 1000*(500/1_000_000),
+                "output": 1000*(1500/1_000_000),
+            },
+            "gpt-3.5-turbo" : {
+                "input" : 1000*(50/1_000_000),
+                "output": 1000*(150/1_000_000),
+            },
+            "gpt-4o-mini" : {
+                "input" : 1000*(15/1_000_000),
+                "output": 1000*(60/1_000_000),
             },
         }
         model_costs = {
