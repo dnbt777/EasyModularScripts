@@ -7,9 +7,11 @@ import subprocess
 import glob
 import fnmatch
 
+WORKSPACE = os.path.join(os.getenv('WORKSPACE', os.getcwd()), ".mcoder-workspace")
+EDITOR = os.getenv('EDITOR', 'nvim')  # Default to 'nvim' if EDITOR environment variable is not set
+
 def create_version_folder():
-    workspace = ".mcoder-workspace"
-    versions = os.path.join(workspace, "versions")
+    versions = os.path.join(WORKSPACE, "versions")
     os.makedirs(versions, exist_ok=True)
     version_folders = [d for d in os.listdir(versions) if os.path.isdir(os.path.join(versions, d))]
     version_numbers = [int(re.search(r'\d+', d).group()) for d in version_folders]
@@ -24,8 +26,7 @@ def save_response(response_folder, index, response):
         f.write(response)
 
 def get_latest_version_folder():
-    workspace = ".mcoder-workspace"
-    versions = os.path.join(workspace, "versions")
+    versions = os.path.join(WORKSPACE, "versions")
     version_folders = [d for d in os.listdir(versions) if os.path.isdir(os.path.join(versions, d))]
     version_numbers = [int(re.search(r'\d+', d).group()) for d in version_folders]
     latest_version_number = max(version_numbers)
@@ -37,17 +38,15 @@ def read_response_file(response_file):
         return f.read()
 
 def get_version_folder(n):
-    workspace = ".mcoder-workspace"
-    versions = os.path.join(workspace, "versions")
+    versions = os.path.join(WORKSPACE, "versions")
     if n is None:
         return get_latest_version_folder()
     else:
         return os.path.join(versions, f"version{n}")
 
 def log_cost(cost_data):
-    workspace = ".mcoder-workspace"
-    os.makedirs(workspace, exist_ok=True)
-    cost_file = os.path.join(workspace, "costs.csv")
+    os.makedirs(WORKSPACE, exist_ok=True)
+    cost_file = os.path.join(WORKSPACE, "costs.csv")
     file_exists = os.path.isfile(cost_file)
 
     with open(cost_file, 'a', newline='') as csvfile:
@@ -57,18 +56,16 @@ def log_cost(cost_data):
         cost_writer.writerow([cost_data['model'], cost_data['input_cost'], cost_data['output_cost'], cost_data['total_cost']])
 
 def clear_workspace(confirm):
-    workspace = ".mcoder-workspace"
     if not confirm:
         user_input = input("THIS WILL DELETE ALL MCODER WORKSPACE FILES. PROCEED? Y/n: ")
         if user_input.lower() != 'y':
             print("Operation cancelled.")
             return
-    shutil.rmtree(workspace)
-    print(f"{workspace} has been cleared.")
+    shutil.rmtree(WORKSPACE)
+    print(f"{WORKSPACE} has been cleared.")
 
 def create_backup(backup_name):
-    workspace = ".mcoder-workspace"
-    backup_folder = os.path.join(workspace, "manual-backups")
+    backup_folder = os.path.join(WORKSPACE, "manual-backups")
     os.makedirs(backup_folder, exist_ok=True)
     backup_path = os.path.join(backup_folder, f"{backup_name}.zip")
 
@@ -83,8 +80,7 @@ def create_backup(backup_name):
     print(f"Backup created at {backup_path}")
 
 def backup_current_state():
-    workspace = ".mcoder-workspace"
-    backup_folder = os.path.join(workspace, "last-write-backup")
+    backup_folder = os.path.join(WORKSPACE, "last-write-backup")
     if os.path.exists(backup_folder):
         shutil.rmtree(backup_folder)
     os.makedirs(backup_folder, exist_ok=True)
@@ -101,8 +97,7 @@ def backup_current_state():
     print(f"Current state backed up to {backup_folder}")
 
 def undo_last_write():
-    workspace = ".mcoder-workspace"
-    backup_folder = os.path.join(workspace, "last-write-backup")
+    backup_folder = os.path.join(WORKSPACE, "last-write-backup")
 
     if not os.path.exists(backup_folder):
         print("No backup found to undo.")
@@ -129,18 +124,20 @@ def undo_last_write():
     print(f"Undo completed. Files restored from {backup_folder}")
 
 def get_user_instructions_from_nvim():
-    workspace = ".mcoder-workspace"
-    os.makedirs(workspace, exist_ok=True)
-    temp_file = os.path.join(workspace, "temp_instructions.txt")
-    subprocess.run(["nvim", temp_file])
+    os.makedirs(WORKSPACE, exist_ok=True)
+    temp_file = os.path.join(WORKSPACE, "temp_instructions.txt")
+    
+    if EDITOR not in ['nvim', 'vim', 'nano']:
+        raise ValueError("Invalid editor specified. Please use 'nvim', 'vim', or 'nano'.")
+    
+    subprocess.run([EDITOR, temp_file])
     with open(temp_file, 'r') as f:
         user_instructions = f.read()
     os.remove(temp_file)
     return user_instructions
 
 def read_mcignore():
-    workspace = ".mcoder-workspace"
-    mcignore_path = os.path.join(workspace, ".mcignore")
+    mcignore_path = os.path.join(WORKSPACE, ".mcignore")
     if not os.path.exists(mcignore_path):
         # Create default .mcignore with __pycache__
         with open(mcignore_path, 'w') as f:
@@ -149,9 +146,8 @@ def read_mcignore():
         return [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
 def ignore(pattern):
-    workspace = ".mcoder-workspace"
-    mcignore_path = os.path.join(workspace, ".mcignore")
-    os.makedirs(workspace, exist_ok=True)
+    mcignore_path = os.path.join(WORKSPACE, ".mcignore")
+    os.makedirs(WORKSPACE, exist_ok=True)
     
     # Create .mcignore file if it doesn't exist
     if not os.path.exists(mcignore_path):
@@ -169,8 +165,7 @@ def ignore(pattern):
         print(f"'{pattern}' is already in .mcignore")
 
 def unignore(pattern):
-    workspace = ".mcoder-workspace"
-    mcignore_path = os.path.join(workspace, ".mcignore")
+    mcignore_path = os.path.join(WORKSPACE, ".mcignore")
     if not os.path.exists(mcignore_path):
         print("No .mcignore file found.")
         return
@@ -189,8 +184,7 @@ def unignore(pattern):
         print(f"Pattern '{pattern}' not found in .mcignore")
 
 def lsignores():
-    workspace = ".mcoder-workspace"
-    mcignore_path = os.path.join(workspace, ".mcignore")
+    mcignore_path = os.path.join(WORKSPACE, ".mcignore")
     if not os.path.exists(mcignore_path):
         print("No .mcignore file found.")
         return
@@ -262,5 +256,11 @@ def apply_mcdiff(file_path, diff_content):
     
     print(f"Changed {file_path}")
 
-
-
+def is_url_or_ip(s):
+    if s.count('.') == 3:
+        try: 
+            return all(0<=int(x)<256 for x in s.split('.'))
+        except ValueError: 
+            return False
+    else: 
+        return s.startswith('http://') or s.startswith('https://')
