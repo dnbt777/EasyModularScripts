@@ -11,18 +11,22 @@ from openai import OpenAI
 import anthropic
 
 class ModelInterface():
-    def __init__(self, client=None, cost_tracker=None):
+    def __init__(self, client=None, cost_tracker=None, model_path=None):
         if client:
             self.client = client
         else:
             # Make a client for Amazon Bedrock
-            self.client = boto3.client(
-                service_name="bedrock-runtime",
-                region_name=os.environ.get("AWS_REGION"),
-                aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
-                aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
-                aws_session_token=os.environ.get("SESSION_TOKEN"),
-            )
+            try:
+                self.client = boto3.client(
+                    service_name="bedrock-runtime",
+                    region_name=os.environ.get("AWS_REGION"),
+                    aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
+                    aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
+                    aws_session_token=os.environ.get("SESSION_TOKEN"),
+                )
+            except Exception as err:
+                log(f"Failed to initialize bedrock runtime, foregoing and continuing")
+                self.client = None
 
         if cost_tracker:
             self.cost_tracker = cost_tracker
