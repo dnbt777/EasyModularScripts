@@ -45,6 +45,8 @@ aliases = {
     # productivity stuff
     "setdesktop": f"python3 {current_dir}/productivity-tools/setdesktop.py", # changes the desktop folder
     "togglesite": f"sudo python3 {current_dir}/productivity-tools/toggle_site_blocking.py", # toggles blocking a site. `togglesite [website]`. has aliases too. `togglesite x` blocks twitter/x.com. see /prod-tools/site_aliases.cfg
+    "apm" : f"python3 {current_dir}/productivity-tools/apm_tracker.py", # tracks actions per minute (clicks and key presses) with a little icon in the task bar window
+    "apm-tracker" : "apm",
 
 
     # meta stuff
