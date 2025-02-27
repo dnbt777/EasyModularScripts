@@ -2,8 +2,8 @@ import os
 import sys
 import json
 import argparse
-from openai import OpenAI
 from dotenv import load_dotenv
+from aiqs.ModelInterface import ModelInterface
 
 load_dotenv()
 
@@ -22,17 +22,18 @@ def save_conversation_history(ask_app_dir, history):
 def main():
     ask_app_dir = os.path.join(os.getenv('EasyModularScriptsDir', ''), "ask-app")
 
-    parser = argparse.ArgumentParser(description="Ask GPT-4 a question.")
-    parser.add_argument('prompt', nargs='*', help="The prompt to send to GPT-4")
+    parser = argparse.ArgumentParser(description="Ask AI a question.")
+    parser.add_argument('prompt', nargs='*', help="The prompt to send to the AI model")
     parser.add_argument('-c', '--respond', action='store_true', help="Respond to the previous conversation")
     args = parser.parse_args()
 
-    # Read the ASK_KEY environment variable
-    ask_key = os.getenv('ASK_KEY')
-    if not ask_key:
-        print("Error: The ASK_KEY environment variable is not set.")
-        sys.exit(1)
-    client = OpenAI(api_key=ask_key)
+    # Initialize the ModelInterface
+    model_interface = ModelInterface()
+    
+    # Get model settings from environment variables
+    model = os.getenv('MODEL', 'gpt-4o')
+    max_tokens = int(os.getenv('MAX_TOKENS', '8192'))
+    stream = int(os.getenv('stream', '0')) == 1
 
     # Check if a prompt argument is provided
     if not args.prompt and not args.respond:
@@ -47,21 +48,39 @@ def main():
     user_prompt = ' '.join(args.prompt)
 
     try:
-        # Prepare messages for the API call
-        messages = [{"role": "system", "content": system_prompt}]
-        messages.extend(conversation_history)
+        # Prepare combined prompt
+        combined_prompt = system_prompt + "\n\n"
+        
+        # Add conversation history
+        for msg in conversation_history:
+            if msg["role"] == "user":
+                combined_prompt += f"User: {msg['content']}\n\n"
+            elif msg["role"] == "assistant":
+                combined_prompt += f"Assistant: {msg['content']}\n\n"
+        
+        # Add the current user prompt
         if user_prompt:
-            messages.append({"role": "user", "content": user_prompt})
-
-        # Make a request to OpenAI's GPT-4 model in chat mode
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=messages
-        )
-
-        # Extract and print the response
-        response_text = response.choices[0].message.content.strip()
-        print(response_text)
+            combined_prompt += f"User: {user_prompt}\n\nAssistant: "
+        
+        # Make a request using the model_interface
+        if stream:
+            response_text, metrics = model_interface.send_to_ai(
+                combined_prompt, 
+                model=model, 
+                max_tokens=max_tokens,
+                stream=True,
+                logging=False
+            )
+            print()
+        else:
+            response_text, metrics = model_interface.send_to_ai(
+                combined_prompt, 
+                model=model, 
+                max_tokens=max_tokens,
+                logging=False
+            )
+            print(response_text)
+            print()
 
         # Update conversation history
         if user_prompt:

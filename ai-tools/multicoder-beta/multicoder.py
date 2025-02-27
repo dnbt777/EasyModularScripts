@@ -11,12 +11,12 @@ load_dotenv()
 try:
     MODEL = os.environ.get('MODEL')
     MAX_TOKENS = int(os.environ.get('MAX_TOKENS'))
-    STREAM = int(os.environ.get('stream'))
+    STREAM = bool(int(os.environ.get('stream')))
 except:
     print("Please set MODEL and MAX_TOKENS in .env")
     print("See .env-example for an example env.")
     print("Available models:")
-    for model_string in "gpt-3.5-turbo gpt-4o bedrock-haiku bedrock-sonnet bedrock-opus bedrock-sonnet3.5 bedrock-sonnet3.5v2 anthropic-haiku anthropic-sonnet anthropic-opus anthropic-sonnet3.5".split():
+    for model_string in "gpt-3.5-turbo gpt-4o bedrock-haiku bedrock-sonnet bedrock-opus bedrock-sonnet3.5 bedrock-sonnet3.5v2 bedrock-sonnet3.7 anthropic-haiku anthropic-sonnet anthropic-opus anthropic-sonnet3.5".split():
         print(model_string)
 
 def main():

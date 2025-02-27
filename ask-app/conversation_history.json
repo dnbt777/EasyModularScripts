@@ -1,1 +1,1 @@
-[{"role": "user", "content": "grep for string"}, {"role": "assistant", "content": "`grep \"string\" filename`"}]
+[{"role": "user", "content": "who are u"}, {"role": "assistant", "content": "I'm Claude, an AI assistant from Anthropic."}, {"role": "user", "content": "which version"}, {"role": "assistant", "content": "Claude 3 Opus"}]
