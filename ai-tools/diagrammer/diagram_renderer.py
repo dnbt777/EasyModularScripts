@@ -71,7 +71,7 @@ def render_diagram(screen: pygame.Surface, diagram: Diagram, offset: tuple, zoom
     mouse_buttons = pygame.mouse.get_pressed()
     keys = pygame.key.get_pressed()
     
-    if mouse_buttons[2] and keys[pygame.K_LSHIFT]:  # Right mouse button and left shift
+    if mouse_buttons[2] and keys[pygame.K_LSHIFT]:  # Right mouse button and left shift  # Right mouse button and left shift
         for box in diagram.boxes:
             x, y = positions[box.id]
             width, height = box.size
@@ -80,11 +80,15 @@ def render_diagram(screen: pygame.Surface, diagram: Diagram, offset: tuple, zoom
                 dx, dy = pygame.mouse.get_rel()
                 positions[box.id][0] += dx / zoom
                 positions[box.id][1] += dy / zoom
+                positions[box.id][1] += dy / zoom
                 break
     
     # Check for collisions and print status
     colliding = check_box_collisions(positions, box_sizes)
     print(f"Boxes colliding: {'Yes' if colliding else 'No'}")
+    
+    # Set background color to dark
+    screen.fill((30, 30, 30))  # Dark background color
     
     for box in diagram.boxes:
         x, y = positions[box.id]
@@ -103,7 +107,7 @@ def render_diagram(screen: pygame.Surface, diagram: Diagram, offset: tuple, zoom
         
         text_y = y + (height - total_text_height) // 2
         for line in wrapped_text:
-            text = font.render(line, True, (0, 0, 0))
+            text = font.render(line, True, (255, 255, 255))  # White text color
             text_rect = text.get_rect(center=(x + width // 2, text_y + line_height // 2))
             screen.blit(text, text_rect)
             text_y += line_height
@@ -113,7 +117,7 @@ def render_diagram(screen: pygame.Surface, diagram: Diagram, offset: tuple, zoom
             desc_font = pygame.font.Font(None, int(18 * zoom))
             desc_lines = word_wrap(box.description, desc_font, width - 10)
             for i, line in enumerate(desc_lines):
-                desc_text = desc_font.render(line, True, (0, 0, 0))
+                desc_text = desc_font.render(line, True, (255, 255, 255))  # White text color
                 desc_rect = desc_text.get_rect(topleft=(x + 5, y + height + 5 + i * 20 * zoom))
                 screen.blit(desc_text, desc_rect)
 
@@ -158,7 +162,7 @@ def render_diagram(screen: pygame.Surface, diagram: Diagram, offset: tuple, zoom
             padding = 5 * zoom
             box_rect = pygame.Rect(mid_x - box_width // 2 - padding, mid_y - box_height // 2 - padding,
                                    box_width + 2 * padding, box_height + 2 * padding)
-            pygame.draw.rect(screen, (255, 255, 255), box_rect)  # White background
+            pygame.draw.rect(screen, (30, 30, 30), box_rect)  # Dark background for description
             pygame.draw.rect(screen, arrow.color, box_rect, 1)  # Border
             
             # Render wrapped text
@@ -166,6 +170,7 @@ def render_diagram(screen: pygame.Surface, diagram: Diagram, offset: tuple, zoom
                 desc_text = desc_font.render(line, True, arrow.color)
                 desc_rect = desc_text.get_rect(center=(mid_x, mid_y - (box_height // 2) + (i + 0.5) * line_height))
                 screen.blit(desc_text, desc_rect)
+    return diagram
 
 def get_diagram_size(diagram: Diagram):
     max_x = max(box.size[0] for box in diagram.boxes)

@@ -11,11 +11,12 @@ load_dotenv()
 try:
     MODEL = os.environ.get('MODEL')
     MAX_TOKENS = int(os.environ.get('MAX_TOKENS'))
+    STREAM = int(os.environ.get('stream'))
 except:
     print("Please set MODEL and MAX_TOKENS in .env")
     print("See .env-example for an example env.")
     print("Available models:")
-    for model_string in "gpt-3.5-turbo gpt-4o bedrock-haiku bedrock-sonnet bedrock-opus bedrock-sonnet3.5 anthropic-haiku anthropic-sonnet anthropic-opus anthropic-sonnet3.5".split():
+    for model_string in "gpt-3.5-turbo gpt-4o bedrock-haiku bedrock-sonnet bedrock-opus bedrock-sonnet3.5 bedrock-sonnet3.5v2 anthropic-haiku anthropic-sonnet anthropic-opus anthropic-sonnet3.5".split():
         print(model_string)
 
 def main():
@@ -42,7 +43,7 @@ def main():
         else:
             if len(sys.argv) > 4:
                 user_instructions = ' '.join(sys.argv[4:])
-        handle_get(llm_count, pattern, recursive, model=MODEL, max_tokens=MAX_TOKENS, user_instructions=user_instructions)
+        handle_get(llm_count, pattern, recursive, model=MODEL, max_tokens=MAX_TOKENS, user_instructions=user_instructions, stream=STREAM)
     elif command == "write":
         if len(sys.argv) < 3:
             print("Usage: mcoder write [m]")

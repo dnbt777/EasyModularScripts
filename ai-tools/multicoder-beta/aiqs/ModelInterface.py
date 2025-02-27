@@ -5,7 +5,9 @@ import json
 import logging
 from aiqs.logger import log
 from aiqs.CostTracker import CostTracker
+from aiqs.model_list import bedrock_models, anthropic_models, openai_models
 import boto3
+import botocore
 from botocore.exceptions import ClientError
 from openai import OpenAI
 import anthropic
@@ -16,12 +18,18 @@ class ModelInterface():
             self.client = client
         else:
             # Make a client for Amazon Bedrock
+            config = botocore.config.Config(
+                read_timeout=900,
+                connect_timeout=900,
+                retries={"max_attempts": 0}
+            )
             self.client = boto3.client(
                 service_name="bedrock-runtime",
                 region_name=os.environ.get("AWS_REGION"),
                 aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
                 aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
                 aws_session_token=os.environ.get("SESSION_TOKEN"),
+                config=config,
             )
 
         if cost_tracker:
@@ -38,12 +46,7 @@ class ModelInterface():
     def invoke_claude_3_with_text(self, prompt, model="bedrock-sonnet", max_tokens=1000):
         """Invokes Anthropic Claude 3 Sonnet to run an inference using the input provided in the request body."""
         client = self.client or boto3.client(service_name="bedrock-runtime", region_name="us-west-2")
-        model_id = {
-            "bedrock-haiku": "anthropic.claude-3-haiku-20240307-v1:0",
-            "bedrock-sonnet": "anthropic.claude-3-sonnet-20240229-v1:0",
-            "bedrock-opus": "anthropic.claude-3-opus-20240229-v1:0",
-            "bedrock-sonnet3.5": "anthropic.claude-3-5-sonnet-20240620-v1:0",
-        }[model]
+        model_id = bedrock_models[model]
         try:
             response = client.invoke_model(
                 modelId=model_id,
@@ -78,13 +81,8 @@ class ModelInterface():
 
     def invoke_claude_3_with_stream(self, prompt, model="bedrock-sonnet", max_tokens=1000):
         """Invokes Anthropic Claude 3 Sonnet to run an inference using the input provided in the request body."""
-        client = self.client or boto3.client(service_name="bedrock-runtime", region_name="us-west-2")
-        model_id = {
-            "bedrock-haiku": "anthropic.claude-3-haiku-20240307-v1:0",
-            "bedrock-sonnet": "anthropic.claude-3-sonnet-20240229-v1:0",
-            "bedrock-opus": "anthropic.claude-3-opus-20240229-v1:0",
-            "bedrock-sonnet3.5": "anthropic.claude-3-5-sonnet-20240620-v1:0",
-        }[model]
+        client = self.client or boto3.client(service_name="bedrock-runtime", region_name="us-west-2") # todo - dont hardcode this
+        model_id = bedrock_models[model]
         try:
             response_stream = client.invoke_model_with_response_stream(
                 modelId=model_id,
@@ -156,12 +154,7 @@ class ModelInterface():
 
     def invoke_anthropic_chat_model(self, prompt, model, max_tokens=1000, temperature=0.7, system_prompt="You are a helpful chatbot."):
         """Invokes Anthropic API to run an inference using the input provided in the request body."""
-        model = {
-            "anthropic-haiku": "claude-3-haiku-20240307",
-            "anthropic-sonnet": "claude-3-sonnet-20240229",
-            "anthropic-opus": "claude-3-opus-20240229",
-            "anthropic-sonnet3.5": "claude-3-5-sonnet-20240620",
-        }[model]
+        model = anthropic_models[model_id]
         try:
             response = self.anthropic_client.messages.create(
                 model=model.replace("anthropic-", ""),
@@ -185,19 +178,19 @@ class ModelInterface():
             log(f"Couldn't invoke Anthropic {model}. Here's why: {str(err)}")
             raise
 
-    def send_to_ai(self, prompt, model, max_tokens=1000, temperature=0.5, stream=True, metrics=True):
+    def send_to_ai(self, prompt, model, max_tokens=1000, temperature=0.5, stream=False, metrics=True):
         log(f"Sending to {model}")
         log("SENDING PROMPT, LENGTH =", len(prompt))
         log("Estimated tokens:", len(prompt) // 5)
         log("PROMPT:", prompt)
         if model.startswith("bedrock-"):
-            if stream == False:
+            if not stream:
                 result_text, metrics = self.invoke_claude_3_with_text(prompt, model=model, max_tokens=max_tokens)
             else:
                 result_text, metrics = self.invoke_claude_3_with_stream(prompt, model=model, max_tokens=max_tokens)
             # Update cost data for Claude models
             self.cost_tracker.add_request_metrics_to_cost_data(metrics)
-        elif model in ["gpt-4o", "gpt-3.5-turbo", "gpt-4o-mini"]:
+        elif model in openai_models:
             result_text, metrics = self.invoke_openai_chat_model(prompt, model, max_tokens=max_tokens, temperature=temperature)
             self.cost_tracker.add_request_metrics_to_cost_data(metrics)
         elif model.startswith("anthropic-"):

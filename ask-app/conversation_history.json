@@ -1,1 +1,1 @@
-[{"role": "user", "content": "np get diagonal of matrix"}, {"role": "assistant", "content": "np.diag(matrix)"}]
+[{"role": "user", "content": "grep for string"}, {"role": "assistant", "content": "`grep \"string\" filename`"}]

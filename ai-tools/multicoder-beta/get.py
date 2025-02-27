@@ -5,7 +5,7 @@ from aiqs import ModelInterface
 from utils import create_version_folder, save_response, log_cost, get_user_instructions_from_nvim, read_mcignore, gather_files
 from system_prompt import SYSTEM_PROMPT
 
-def handle_get(llm_count, pattern, recursive, model=None, max_tokens=4095, user_instructions=None):
+def handle_get(llm_count, pattern, recursive, model=None, max_tokens=4095, user_instructions=None, stream=False):
     if user_instructions is None:
         user_instructions = get_user_instructions_from_nvim()
 
@@ -41,7 +41,7 @@ def handle_get(llm_count, pattern, recursive, model=None, max_tokens=4095, user_
 
     modelinterface = ModelInterface()
     for i in range(llm_count):
-        response = modelinterface.send_to_ai(prompt, model=model, max_tokens=max_tokens)
+        response = modelinterface.send_to_ai(prompt, model=model, max_tokens=max_tokens, stream=stream)
         response_text = response[0]  # Extract the actual response text from the tuple
         save_response(response_folder, i, response_text)
         log_cost(modelinterface.cost_tracker.cost_data[-1])  # Log the latest cost data

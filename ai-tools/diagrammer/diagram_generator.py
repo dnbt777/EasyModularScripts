@@ -40,6 +40,7 @@ def generate_diagram(project_files, system_instructions, model_interface, genera
     raise ValueError("No diagram found in the AI response after all generations.")
 
 def save_diagram(diagram, output_path):
+    # Create the 'diagrams' directory if it does not exist
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, 'w') as file:
         file.write(diagram)
@@ -135,7 +136,7 @@ def main():
         display_diagram(output_path)
     except Exception as e:
         print(f"An error occurred: {str(e)}")
-        raise error
+        raise e
         sys.exit(1)
 
 if __name__ == "__main__":

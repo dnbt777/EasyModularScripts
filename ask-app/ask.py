@@ -55,7 +55,7 @@ def main():
 
         # Make a request to OpenAI's GPT-4 model in chat mode
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o",
             messages=messages
         )
 
