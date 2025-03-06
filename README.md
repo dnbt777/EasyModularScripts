@@ -13,14 +13,14 @@ easily add scripts/modules
 ### Actions per minute tracker
 - `apm` : makes an actions per minute tracker appear as a little graph and a number. shows you how many clicks and key presses you make.
 
+![image](https://github.com/user-attachments/assets/4eda86ba-ecfe-43b2-a47d-9806099db48f)
 
-### Code TODO/ASSUMPTIONS/OPTIMIZATIONS organizer
+
+### Code status report
 - `todos` : Typing this in your codebase will tell you exactly where todo, assumption, and optimization comments are in your code.
+- For now, edit code-tools/todos.py to add more categories, add/move ignored files and dirs etc. by default ignores .venv and whatnot
 
-
-
-
-
+![image](https://github.com/user-attachments/assets/f029708e-b855-4b47-88e3-03d3e0909ba0)
 
 
 
