@@ -18,9 +18,9 @@ period_start_time = None
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description="APM Monitor - Track actions per minute")
-parser.add_argument("-constant", action="store_true", help="Use constant/rolling mode")
-parser.add_argument("-report-card", action="store_true", help="Use report-card mode (default)")
-parser.add_argument("-period", type=float, default=60, help="Period in seconds")
+parser.add_argument("-constant", action="store_true", help="Constant/rolling window mode")
+parser.add_argument("-report-card", action="store_true", help="Report-card mode (default)")
+parser.add_argument("-period", type=float, default=60, help="Period in seconds (default=60s)")
 args = parser.parse_args()
 
 # Determine mode: default to "report-card" if neither or both flags are specified
