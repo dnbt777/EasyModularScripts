@@ -22,7 +22,8 @@ easily add scripts/modules
 - `todos` : Typing this in your codebase will tell you exactly where todo, assumption, and optimization comments are in your code.
 - For now, edit code-tools/todos.py to add more categories, add/move ignored files and dirs etc. by default ignores .venv and whatnot
 
-![image](https://github.com/user-attachments/assets/f029708e-b855-4b47-88e3-03d3e0909ba0)
+![image](https://github.com/user-attachments/assets/bf09b556-049a-4513-bee4-87256c3bffc1)
+
 
 
 
