@@ -10,6 +10,20 @@ easily add scripts/modules
 
 
 ## Modules included
+### Actions per minute tracker
+- `apm` : makes an actions per minute tracker appear as a little graph and a number. shows you how many clicks and key presses you make.
+
+
+### Code TODO/ASSUMPTIONS/OPTIMIZATIONS organizer
+- `todos` : Typing this in your codebase will tell you exactly where todo, assumption, and optimization comments are in your code.
+
+
+
+
+
+
+
+
 ### quick LLM tools
 - `ask {prompt}`   : make gpt4o output an answer in as few chars as possible
 - `runit` : runs the previous `ask` output as a command in the current working dir
