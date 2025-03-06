@@ -59,6 +59,9 @@ aliases = {
     "gitpushall":f"bash {current_dir}/git/gitpushall.sh", # usage: gitpushall msg -> adds . commits w msg and pushes
     "gpa":"gitpushall",
 
+    # code tools
+    "todos":f"py {current_dir}/code-tools/todos.py",
+
 
     # misc
     # returns list of all files as a string (copy-paste into python or js)
