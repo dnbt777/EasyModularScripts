@@ -11,9 +11,11 @@ easily add scripts/modules
 
 ## Modules included
 ### Actions per minute tracker
-- `apm` : makes an actions per minute tracker appear as a little graph and a number. shows you how many clicks and key presses you make.
+- `apm` : creates an actions-per-minute counter and live graph in the taskbar. by default, it shows how many clicks + key presses you make during each 1min window.
 
-![image](https://github.com/user-attachments/assets/4eda86ba-ecfe-43b2-a47d-9806099db48f)
+![image](https://github.com/user-attachments/assets/fc1e9753-a97c-4781-96b7-27804f6495ce)
+
+![image](https://github.com/user-attachments/assets/315282ab-4d5a-4b9e-8359-33fb17152ef0)
 
 
 ### Code status report
