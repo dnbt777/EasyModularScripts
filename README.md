@@ -9,8 +9,21 @@ easily add scripts/modules
 </p>
 
 
+## Setup
+1. git clone this into your favorite location for scripts
+2. run `python3 update-all.py` to add aliases to bashrc
+3. rename the .env-example in ./ask-app and ./ai-tools/mcoder-beta and mcoder to .env and fill it out (if you want)
+4. run `pip install -r requirements.txt` to install requirements
+5. install ffmpeg
+
+## Adding your own
+1. write the code
+2. add an alias in alias_config.py
+3. run `python3 update-all.py` to update/add new aliases in bashrc
+
+
 ## Modules included
-### Actions per minute tracker
+### Actions per minute tracker (linux only)
 - `apm` : creates an actions-per-minute counter and live graph in the taskbar. by default, it shows how many clicks + key presses you make during each 1min window.
 
 ![image](https://github.com/user-attachments/assets/fc1e9753-a97c-4781-96b7-27804f6495ce)
@@ -119,14 +132,3 @@ to set it up, rename .env-example to .env and add relevant API keys in
 ![out3](https://github.com/dnbt777/EasyModularScripts/assets/169108635/2e153b29-4688-4ce6-88b1-e1c28ff30e11)
 
 
-## Setup
-1. git clone this into your favorite location for scripts
-2. run `python3 update-all.py` to add aliases to bashrc
-3. rename the .env-example in ./ask-app to .env and put your openai key in there
-4. run `pip install -r requirements.txt` to install requirements
-5. install ffmpeg
-
-## Adding your own
-1. write the code
-2. add an alias in alias_config.py
-3. run `python3 update-all.py` to update/add new aliases in bashrc
