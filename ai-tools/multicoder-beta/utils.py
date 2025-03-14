@@ -206,6 +206,23 @@ def lsignores():
 def should_ignore(file_path, ignore_patterns):
     normalized_path = os.path.normpath(file_path)
     for pattern in ignore_patterns:
+        # Handle patterns ending with slash (directory patterns like '.git/')
+        if pattern.endswith('/'):
+            dir_pattern = pattern[:-1]  # Remove the trailing slash
+            
+            # Check if the path is exactly this directory
+            if normalized_path == dir_pattern:
+                return True
+                
+            # Check if the path is a file within this directory
+            if normalized_path.startswith(dir_pattern + os.sep):
+                return True
+                
+            # Check if the path contains this directory segment
+            path_parts = normalized_path.split(os.sep)
+            if dir_pattern in path_parts:
+                return True
+        
         # Check for exact match
         if fnmatch.fnmatch(normalized_path, pattern):
             return True
