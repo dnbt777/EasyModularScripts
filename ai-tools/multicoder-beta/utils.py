@@ -26,7 +26,12 @@ def save_response(response_folder, index, response):
 def get_latest_version_folder():
     workspace = ".mcoder-workspace"
     versions = os.path.join(workspace, "versions")
-    version_folders = [d for d in os.listdir(versions) if os.path.isdir(os.path.join(versions, d))]
+    try:
+        version_folders = [d for d in os.listdir(versions) if os.path.isdir(os.path.join(versions, d))]
+    except FileNotFoundError:
+        # make versions dir
+        os.makedirs(versions, exist_ok=True)
+        version_folders = []
     version_numbers = [int(re.search(r'\d+', d).group()) for d in version_folders]
     latest_version_number = max(version_numbers)
     latest_version_folder = os.path.join(versions, f"version{latest_version_number}")
@@ -88,15 +93,23 @@ def backup_current_state():
     if os.path.exists(backup_folder):
         shutil.rmtree(backup_folder)
     os.makedirs(backup_folder, exist_ok=True)
+    
+    # Read ignore patterns
+    ignore_patterns = read_mcignore()
 
-    for root, _, files in os.walk('.'):
-        if '.mcoder-workspace' in root:
+    for root, dirs, files in os.walk('.'):
+        # Skip the .mcoder-workspace directory
+        if '.mcoder-workspace' in root or should_ignore(root, ignore_patterns):
+            dirs[:] = []  # Skip this directory and its subdirectories
             continue
+            
         for file in files:
             file_path = os.path.join(root, file)
-            backup_path = os.path.join(backup_folder, os.path.relpath(file_path, '.'))
-            os.makedirs(os.path.dirname(backup_path), exist_ok=True)
-            shutil.copy(file_path, backup_path)
+            # Only backup files that should not be ignored
+            if not should_ignore(file_path, ignore_patterns):
+                backup_path = os.path.join(backup_folder, os.path.relpath(file_path, '.'))
+                os.makedirs(os.path.dirname(backup_path), exist_ok=True)
+                shutil.copy(file_path, backup_path)
 
     print(f"Current state backed up to {backup_folder}")
 
@@ -107,20 +120,36 @@ def undo_last_write():
     if not os.path.exists(backup_folder):
         print("No backup found to undo.")
         return
+    
+    # Read ignore patterns
+    ignore_patterns = read_mcignore()
 
+    # Restore files from backup
     for root, _, files in os.walk(backup_folder):
         for file in files:
             backup_file_path = os.path.join(root, file)
             relative_path = os.path.relpath(backup_file_path, backup_folder)
             original_file_path = os.path.join(os.getcwd(), relative_path)
+            
+            # Skip if the file should be ignored
+            if should_ignore(original_file_path, ignore_patterns):
+                continue
+                
             os.makedirs(os.path.dirname(original_file_path), exist_ok=True)
             shutil.copy(backup_file_path, original_file_path)
 
+    # Remove files that are not in backup
     for root, _, files in os.walk('.'):
-        if '.mcoder-workspace' in root:
+        # Skip .mcoder-workspace and ignored directories
+        if '.mcoder-workspace' in root or should_ignore(root, ignore_patterns):
             continue
+            
         for file in files:
             file_path = os.path.join(root, file)
+            # Skip ignored files
+            if should_ignore(file_path, ignore_patterns):
+                continue
+                
             relative_path = os.path.relpath(file_path, '.')
             backup_file_path = os.path.join(backup_folder, relative_path)
             if not os.path.exists(backup_file_path):
@@ -144,7 +173,7 @@ def read_mcignore():
     if not os.path.exists(mcignore_path):
         # Create default .mcignore with __pycache__ and .git/
         with open(mcignore_path, 'w') as f:
-            f.write("__pycache__\n.git/\n")
+            f.write("__pycache__\n.git/*\n.git/")
     with open(mcignore_path, 'r') as f:
         return [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
@@ -156,7 +185,7 @@ def ignore(pattern):
     # Create .mcignore file if it doesn't exist
     if not os.path.exists(mcignore_path):
         with open(mcignore_path, 'w') as f:
-            f.write("__pycache__\n.git/\n")
+            f.write("__pycache__\n.git/*\n.git/")
     
     with open(mcignore_path, 'r') as f:
         patterns = f.read().splitlines()

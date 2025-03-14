@@ -1,1 +1,1 @@
-[{"role": "user", "content": "cpp built in for sin cos sqrt how"}, {"role": "assistant", "content": "#include <cmath>\nUse sin(), cos(), sqrt() functions."}]
+[{"role": "user", "content": "ffmpeg cmd cut the first 15 seconds and stop after that for x.mp4"}, {"role": "assistant", "content": "ffmpeg -i x.mp4 -ss 0 -t 15 -c copy out.mp4"}]
