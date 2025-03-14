@@ -142,9 +142,9 @@ def read_mcignore():
     workspace = ".mcoder-workspace"
     mcignore_path = os.path.join(workspace, ".mcignore")
     if not os.path.exists(mcignore_path):
-        # Create default .mcignore with __pycache__
+        # Create default .mcignore with __pycache__ and .git/
         with open(mcignore_path, 'w') as f:
-            f.write("__pycache__\n")
+            f.write("__pycache__\n.git/\n")
     with open(mcignore_path, 'r') as f:
         return [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
@@ -156,7 +156,7 @@ def ignore(pattern):
     # Create .mcignore file if it doesn't exist
     if not os.path.exists(mcignore_path):
         with open(mcignore_path, 'w') as f:
-            f.write("__pycache__\n")
+            f.write("__pycache__\n.git/\n")
     
     with open(mcignore_path, 'r') as f:
         patterns = f.read().splitlines()
