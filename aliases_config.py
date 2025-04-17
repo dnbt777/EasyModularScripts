@@ -33,8 +33,17 @@ aliases = {
     "mcoder":f"python3 {current_dir}/ai-tools/multicoder/multicoder.py",
     "mc":"mcoder",
     
+    # beta version that uses pattern matching diffs instead of full file rewrites
     "mcoderb":f"python3 {current_dir}/ai-tools/multicoder-beta/multicoder.py",
     "mcb":"mcoderb",
+
+    # version that uses git-like diffs instead of pattern matching diffs (significantly reduced cost)
+    "mcoderd":f"python3 {current_dir}/ai-tools/multicoder-diff/multicoder.py",
+    "mcd":"mcoderd",
+
+    # mcoder beta. uses openrouter
+    "mcoderor":f"python3 {current_dir}/ai-tools/multicoder-openrouter/multicoder.py",
+    "mcor":"mcoderor",
 
     # diagrammer app
     # makes a diagram of any project, file, etc
