@@ -9,7 +9,7 @@ media-tools/videoeditor/downloads/*
 media-tools/videoeditor/uploads/*
 media-tools/videoeditor/temp/*
 
-
+ask-app/*.json
 
 ask-app/last_output.log
 *.log
