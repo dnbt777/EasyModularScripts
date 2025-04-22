@@ -4,7 +4,9 @@ import shutil
 from get import handle_get
 from write import handle_write, list_responses
 from rollback import handle_rollback
-from utils import clear_workspace, create_backup, undo_last_write, backup_current_state, ignore, unignore, lsignores
+from utils import (
+        clear_workspace, create_backup, undo_last_write, backup_current_state, ignore, unignore, lsignores,
+)
 from dotenv import load_dotenv
 from aiqs.model_list import openrouter_models
 

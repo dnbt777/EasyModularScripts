@@ -1,6 +1,9 @@
 import os
 import re
-from utils import get_latest_version_folder, read_response_file, apply_mcdiff
+from utils import (
+    get_latest_version_folder, read_response_file, apply_mcdiff,
+    extract_patch_files, apply_patch
+)
 
 
 
@@ -16,21 +19,28 @@ def handle_write(m):
     for file_path, file_content in files:
         if file_path:  # Ensure file_path is not empty
             dir_path = os.path.dirname(file_path)
-            if dir_path:  # Ensure dir_path is not empty
+            if dir_path:
                 os.makedirs(dir_path, exist_ok=True)
             with open(file_path, 'w') as f:
                 f.write(file_content)
             print(f"File created: {file_path}")
 
-    # Handle mcdiff changes
+    # Handle legacy mcdiff blocks
     mcdiff_pattern = re.compile(r'<mcdiff file="([^"]+)">(.*?)</mcdiff>', re.DOTALL)
     diffs = mcdiff_pattern.findall(response_content)
 
     for file_path, diff_content in diffs:
-        if file_path:  # Ensure file_path is not empty
+        if file_path:
             apply_mcdiff(file_path, diff_content)
 
-    print(f"Files updated from {response_file}")
+    # Handle unified diff patch blocks
+    patch_files = extract_patch_files(response_content)
+    print(f"Processing {len(patch_files)} patch files")
+    for _patch_name, patch_content in patch_files:
+        print(patch_content)
+        apply_patch(patch_content)
+
+    print(f"Changes applied from {response_file}")
 
 
 def list_responses():

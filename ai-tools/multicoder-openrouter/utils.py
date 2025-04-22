@@ -6,6 +6,7 @@ import zipfile
 import subprocess
 import glob
 import fnmatch
+import tempfile
 
 def create_version_folder():
     workspace = ".mcoder-workspace"
@@ -309,4 +310,50 @@ def apply_mcdiff(file_path, diff_content):
     print(f"Changed {file_path}")
 
 
+def extract_patch_files(response_text):
+    """
+    Extracts all <patch_file name="...">...</patch_file> blocks.
+    Returns a list of (filename, patch_text) tuples.
+    """
+    pattern = re.compile(
+        r'<patch_file\s+name="([^"]+)">(.*?)</patch_file>',
+        re.DOTALL | re.IGNORECASE,
+    )
+    return [(match[0], match[1].strip()) for match in pattern.findall(response_text)]
 
+
+def apply_patch(patch_content):
+    """
+    Apply a unified diff against the working tree. Tries the system `patch`
+    utility first, then falls back to `git apply`.
+    """
+    with tempfile.NamedTemporaryFile("w+", delete=False) as tmp:
+        tmp.write(patch_content)
+        tmp_path = tmp.name
+
+    try:
+        # First attempt: BSD/GNU patch
+        result = subprocess.run(
+            ["patch", "-p1", "--batch", "-i", tmp_path],
+            text=True,
+            capture_output=True,
+        )
+        if result.returncode == 0:
+            print(result.stdout.strip())
+            return
+
+        # Fallback: git apply
+        result = subprocess.run(
+            ["git", "apply", "--whitespace=fix", tmp_path],
+            text=True,
+            capture_output=True,
+        )
+        if result.returncode == 0:
+            print(result.stdout.strip())
+            return
+
+        # Both methods failed
+        print(result.stderr.strip())
+        raise RuntimeError("Failed to apply unified diff patch.")
+    finally:
+        os.remove(tmp_path)
